@@ -1,18 +1,20 @@
 package org.example.mvc;
 
-import org.example.mvc.controller.Controller;
-import org.example.mvc.controller.HomeController;
+import org.example.mvc.controller.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestMappingHandlerMapping {
-    private Map<String, Controller> mappings = new HashMap<>();
+public class RequestMappingHandlerMapping implements HandlerMapping {
+    private Map<HandlerKey, Controller> mappings = new HashMap<>();
 
     void init() {
-        mappings.put("/", new HomeController());
+//        mappings.put(new HandlerKey(RequestMethod.GET,"/"), new HomeController());
+        mappings.put(new HandlerKey(RequestMethod.GET,"/users"), new UserListController());
+        mappings.put(new HandlerKey(RequestMethod.POST,"/users"), new UserCreateController());
+        mappings.put(new HandlerKey(RequestMethod.GET,"/user/form"), new ForwardController("/user/form"));
     }
-    public Controller findHandler(String uriPath) {
+    public Controller findHandler(HandlerKey uriPath) {
         return mappings.get(uriPath);
     }
 }
